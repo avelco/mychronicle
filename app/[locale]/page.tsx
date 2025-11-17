@@ -114,7 +114,14 @@ const FAQItem = ({ question, answer }: FAQItemProps) => {
 
 export default function MyChronicle() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const t = useTranslations('nav');
+  const tNav = useTranslations('nav');
+  const tHero = useTranslations('hero');
+  const tFeatures = useTranslations('features');
+  const tDemo = useTranslations('demo');
+  const tPricing = useTranslations('pricing');
+  const tFaq = useTranslations('faq');
+  const tCta = useTranslations('cta');
+  const tFooter = useTranslations('footer');
   return (
     <div className="min-h-screen bg-slate-950 text-slate-100">
       {/* Fonts */}
@@ -140,34 +147,34 @@ export default function MyChronicle() {
               href="#features"
               className="text-sm text-slate-300 hover:text-white transition-colors"
             >
-              {t('features')}
+              {tNav('features')}
             </a>
             <a
               href="#demo"
               className="text-sm text-slate-300 hover:text-white transition-colors"
             >
-              {t('stories')}
+              {tNav('stories')}
             </a>
             <a
               href="#pricing"
               className="text-sm text-slate-300 hover:text-white transition-colors"
             >
-              {t('pricing')}
+              {tNav('pricing')}
             </a>
             <a
               href="#faq"
               className="text-sm text-slate-300 hover:text-white transition-colors"
             >
-              {t('faq')}
+              {tNav('faq')}
             </a>
             <SignedOut>
               <SignInButton>
                 <Button variant="outline" size="sm">
-                  {t('signIn')}
+                  {tNav('signIn')}
                 </Button>
               </SignInButton>
               <SignUpButton>
-                <Button size="sm">{t('signUp')}</Button>
+                <Button size="sm">{tNav('signUp')}</Button>
               </SignUpButton>
             </SignedOut>
             <SignedIn>
@@ -197,34 +204,34 @@ export default function MyChronicle() {
                 href="#features"
                 className="text-slate-300 hover:text-white transition-colors"
               >
-                {t('features')}
+                {tNav('features')}
               </a>
               <a
                 href="#demo"
                 className="text-slate-300 hover:text-white transition-colors"
               >
-                {t('stories')}
+                {tNav('stories')}
               </a>
               <a
                 href="#pricing"
                 className="text-slate-300 hover:text-white transition-colors"
               >
-                {t('pricing')}
+                {tNav('pricing')}
               </a>
               <a
                 href="#faq"
                 className="text-slate-300 hover:text-white transition-colors"
               >
-                {t('faq')}
+                {tNav('faq')}
               </a>
               <SignedOut>
                 <SignInButton>
                   <Button variant="outline" className="w-full">
-                    {t('signIn')}
+                    {tNav('signIn')}
                   </Button>
                 </SignInButton>
                 <SignUpButton>
-                  <Button className="w-full">{t('signUp')}</Button>
+                  <Button className="w-full">{tNav('signUp')}</Button>
                 </SignUpButton>
               </SignedOut>
               <SignedIn>
@@ -243,14 +250,16 @@ export default function MyChronicle() {
 
         <div className="container mx-auto px-6 text-center relative z-10">
           <h1 className="font-serif text-5xl md:text-7xl font-bold mb-6 bg-gradient-to-r from-white via-violet-100 to-slate-300 bg-clip-text text-transparent">
-            Escribe tu historia,
-            <br />
-            una conversación a la vez
+            {tHero('title').split('\n').map((line, i) => (
+              <React.Fragment key={i}>
+                {line}
+                {i === 0 && <br />}
+              </React.Fragment>
+            ))}
           </h1>
 
           <p className="text-xl md:text-2xl text-slate-400 mb-12 max-w-3xl mx-auto leading-relaxed">
-            Tu Crónica Personal. Cada chat es una aventura donde tus decisiones
-            definen la trama. ¿Qué final escribirás?
+            {tHero('subtitle')}
           </p>
 
           {/* Phone Mockup Visual */}
@@ -300,7 +309,7 @@ export default function MyChronicle() {
           </div>
 
           <Button size="lg" className="text-lg px-10 group">
-            Comenzar mi crónica
+            {tHero('cta')}
             <Play className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
           </Button>
         </div>
@@ -310,51 +319,51 @@ export default function MyChronicle() {
       <section id="features" className="py-24 bg-slate-900/30">
         <div className="container mx-auto px-6">
           <h2 className="font-serif text-4xl md:text-5xl font-bold text-center mb-16">
-            Convierte la Interacción en
-            <br />
-            Historial Legendario
+            {tFeatures('title').split('\n').map((line, i) => (
+              <React.Fragment key={i}>
+                {line}
+                {i === 0 && <br />}
+              </React.Fragment>
+            ))}
           </h2>
 
           <div className="grid md:grid-cols-3 gap-8">
             <Card className="group hover:border-violet-600/50 transition-all hover:shadow-lg hover:shadow-violet-600/10">
               <MessageSquare className="h-12 w-12 text-violet-500 mb-4 group-hover:scale-110 transition-transform" />
               <h3 className="font-serif text-2xl font-semibold mb-3">
-                Chatea con Personajes Vivos
+                {tFeatures('chat.title')}
               </h3>
               <p className="text-slate-400 leading-relaxed">
-                Interactúa con narradores de IA que reaccionan a tus elecciones
-                y estilo de diálogo.
+                {tFeatures('chat.description')}
               </p>
               <div className="mt-4 text-sm text-violet-400 font-medium">
-                Conversación dinámica
+                {tFeatures('chat.tag')}
               </div>
             </Card>
 
             <Card className="group hover:border-violet-600/50 transition-all hover:shadow-lg hover:shadow-violet-600/10">
               <GitFork className="h-12 w-12 text-violet-500 mb-4 group-hover:scale-110 transition-transform" />
               <h3 className="font-serif text-2xl font-semibold mb-3">
-                Crea Ramas de la Trama
+                {tFeatures('branches.title')}
               </h3>
               <p className="text-slate-400 leading-relaxed">
-                Cada decisión y respuesta es un punto de bifurcación que te
-                lleva a un final único y personal.
+                {tFeatures('branches.description')}
               </p>
               <div className="mt-4 text-sm text-violet-400 font-medium">
-                Múltiples finales
+                {tFeatures('branches.tag')}
               </div>
             </Card>
 
             <Card className="group hover:border-violet-600/50 transition-all hover:shadow-lg hover:shadow-violet-600/10">
               <BookOpen className="h-12 w-12 text-violet-500 mb-4 group-hover:scale-110 transition-transform" />
               <h3 className="font-serif text-2xl font-semibold mb-3">
-                Tu Biblioteca de Crónicas
+                {tFeatures('library.title')}
               </h3>
               <p className="text-slate-400 leading-relaxed">
-                Todas tus aventuras se guardan y formatean como libros digitales
-                para tu colección personal.
+                {tFeatures('library.description')}
               </p>
               <div className="mt-4 text-sm text-violet-400 font-medium">
-                Colección / Permanencia
+                {tFeatures('library.tag')}
               </div>
             </Card>
           </div>
@@ -365,13 +374,16 @@ export default function MyChronicle() {
       <section id="demo" className="py-24">
         <div className="container mx-auto px-6">
           <h2 className="font-serif text-4xl md:text-5xl font-bold text-center mb-6">
-            De Conversación Instantánea
-            <br />a Prosa Épica
+            {tDemo('title').split('\n').map((line, i) => (
+              <React.Fragment key={i}>
+                {line}
+                {i === 0 && <br />}
+              </React.Fragment>
+            ))}
           </h2>
 
           <p className="text-center text-slate-400 text-lg mb-12 max-w-2xl mx-auto">
-            Elige tu historia y chatea con personajes únicos. Cada conversación
-            se transforma en una crónica épica.
+            {tDemo('subtitle')}
           </p>
 
           <div className="max-w-7xl mx-auto">
@@ -379,7 +391,7 @@ export default function MyChronicle() {
               {/* Left Column - Historias */}
               <div>
                 <h3 className="font-serif text-2xl font-bold mb-6 text-violet-300">
-                  Historias Disponibles
+                  {tDemo('stories')}
                 </h3>
                 <div className="space-y-6">
                   {/* Historia 1 */}
@@ -391,15 +403,14 @@ export default function MyChronicle() {
                       <div className="flex-1 flex flex-col justify-between py-2">
                         <div>
                           <h4 className="font-serif text-lg font-bold mb-2">
-                            El Dragón Olvidado
+                            {tDemo('story1.title')}
                           </h4>
                           <p className="text-sm text-slate-400 line-clamp-2">
-                            Descubre la verdad detrás del último dragón en una
-                            aventura de fantasía épica.
+                            {tDemo('story1.description')}
                           </p>
                         </div>
                         <Button size="sm" className="self-start mt-2">
-                          Comenzar
+                          {tDemo('startButton')}
                         </Button>
                       </div>
                     </div>
@@ -414,15 +425,14 @@ export default function MyChronicle() {
                       <div className="flex-1 flex flex-col justify-between py-2">
                         <div>
                           <h4 className="font-serif text-lg font-bold mb-2">
-                            Misterio en el Expreso
+                            {tDemo('story2.title')}
                           </h4>
                           <p className="text-sm text-slate-400 line-clamp-2">
-                            Resuelve un asesinato en un tren de lujo mientras
-                            viajas por Europa.
+                            {tDemo('story2.description')}
                           </p>
                         </div>
                         <Button size="sm" className="self-start mt-2">
-                          Comenzar
+                          {tDemo('startButton')}
                         </Button>
                       </div>
                     </div>
@@ -437,15 +447,14 @@ export default function MyChronicle() {
                       <div className="flex-1 flex flex-col justify-between py-2">
                         <div>
                           <h4 className="font-serif text-lg font-bold mb-2">
-                            La Ciudad Perdida
+                            {tDemo('story3.title')}
                           </h4>
                           <p className="text-sm text-slate-400 line-clamp-2">
-                            Explora ruinas antiguas y descubre secretos de una
-                            civilización olvidada.
+                            {tDemo('story3.description')}
                           </p>
                         </div>
                         <Button size="sm" className="self-start mt-2">
-                          Comenzar
+                          {tDemo('startButton')}
                         </Button>
                       </div>
                     </div>
@@ -460,15 +469,14 @@ export default function MyChronicle() {
                       <div className="flex-1 flex flex-col justify-between py-2">
                         <div>
                           <h4 className="font-serif text-lg font-bold mb-2">
-                            Romance en París
+                            {tDemo('story4.title')}
                           </h4>
                           <p className="text-sm text-slate-400 line-clamp-2">
-                            Una historia de amor en la ciudad de las luces con
-                            finales múltiples.
+                            {tDemo('story4.description')}
                           </p>
                         </div>
                         <Button size="sm" className="self-start mt-2">
-                          Comenzar
+                          {tDemo('startButton')}
                         </Button>
                       </div>
                     </div>
@@ -479,7 +487,7 @@ export default function MyChronicle() {
               {/* Right Column - Avatares de Chat */}
               <div>
                 <h3 className="font-serif text-2xl font-bold mb-6 text-violet-300">
-                  Personajes Disponibles
+                  {tDemo('characters')}
                 </h3>
                 <div className="grid grid-cols-2 gap-4">
                   {/* Avatar 1 */}
@@ -487,8 +495,8 @@ export default function MyChronicle() {
                     <div className="w-full aspect-square bg-gradient-to-br from-violet-600 to-purple-800 rounded-lg mb-3 flex items-center justify-center">
                       <span className="text-4xl">🧙‍♂️</span>
                     </div>
-                    <h4 className="font-semibold text-sm mb-1">El Sabio</h4>
-                    <p className="text-xs text-slate-400">Mago ancestral</p>
+                    <h4 className="font-semibold text-sm mb-1">{tDemo('character1.name')}</h4>
+                    <p className="text-xs text-slate-400">{tDemo('character1.role')}</p>
                   </Card>
 
                   {/* Avatar 2 */}
@@ -496,8 +504,8 @@ export default function MyChronicle() {
                     <div className="w-full aspect-square bg-gradient-to-br from-red-600 to-orange-800 rounded-lg mb-3 flex items-center justify-center">
                       <span className="text-4xl">⚔️</span>
                     </div>
-                    <h4 className="font-semibold text-sm mb-1">La Guerrera</h4>
-                    <p className="text-xs text-slate-400">Campeona invicta</p>
+                    <h4 className="font-semibold text-sm mb-1">{tDemo('character2.name')}</h4>
+                    <p className="text-xs text-slate-400">{tDemo('character2.role')}</p>
                   </Card>
 
                   {/* Avatar 3 */}
@@ -505,9 +513,9 @@ export default function MyChronicle() {
                     <div className="w-full aspect-square bg-gradient-to-br from-amber-600 to-yellow-800 rounded-lg mb-3 flex items-center justify-center">
                       <span className="text-4xl">🕵️</span>
                     </div>
-                    <h4 className="font-semibold text-sm mb-1">El Detective</h4>
+                    <h4 className="font-semibold text-sm mb-1">{tDemo('character3.name')}</h4>
                     <p className="text-xs text-slate-400">
-                      Investigador astuto
+                      {tDemo('character3.role')}
                     </p>
                   </Card>
 
@@ -517,9 +525,9 @@ export default function MyChronicle() {
                       <span className="text-4xl">🗺️</span>
                     </div>
                     <h4 className="font-semibold text-sm mb-1">
-                      La Exploradora
+                      {tDemo('character4.name')}
                     </h4>
-                    <p className="text-xs text-slate-400">Aventurera audaz</p>
+                    <p className="text-xs text-slate-400">{tDemo('character4.role')}</p>
                   </Card>
 
                   {/* Avatar 5 */}
@@ -527,8 +535,8 @@ export default function MyChronicle() {
                     <div className="w-full aspect-square bg-gradient-to-br from-rose-600 to-pink-800 rounded-lg mb-3 flex items-center justify-center">
                       <span className="text-4xl">💕</span>
                     </div>
-                    <h4 className="font-semibold text-sm mb-1">El Romántico</h4>
-                    <p className="text-xs text-slate-400">Poeta soñador</p>
+                    <h4 className="font-semibold text-sm mb-1">{tDemo('character5.name')}</h4>
+                    <p className="text-xs text-slate-400">{tDemo('character5.role')}</p>
                   </Card>
 
                   {/* Avatar 6 */}
@@ -536,8 +544,8 @@ export default function MyChronicle() {
                     <div className="w-full aspect-square bg-gradient-to-br from-slate-600 to-gray-800 rounded-lg mb-3 flex items-center justify-center">
                       <span className="text-4xl">🐉</span>
                     </div>
-                    <h4 className="font-semibold text-sm mb-1">El Dragón</h4>
-                    <p className="text-xs text-slate-400">Criatura milenaria</p>
+                    <h4 className="font-semibold text-sm mb-1">{tDemo('character6.name')}</h4>
+                    <p className="text-xs text-slate-400">{tDemo('character6.role')}</p>
                   </Card>
                 </div>
               </div>
@@ -551,11 +559,10 @@ export default function MyChronicle() {
         <div className="container mx-auto px-6">
           <div className="text-center mb-16">
             <h2 className="font-serif text-4xl md:text-5xl font-bold mb-6">
-              Elige tu Plan de Aventura
+              {tPricing('title')}
             </h2>
             <p className="text-xl text-slate-400 max-w-2xl mx-auto">
-              Desde explorador casual hasta cronista legendario. Cada plan
-              desbloquea nuevas posibilidades narrativas.
+              {tPricing('subtitle')}
             </p>
           </div>
 
@@ -564,17 +571,17 @@ export default function MyChronicle() {
             <Card className="relative overflow-hidden hover:border-slate-700 transition-all">
               <div className="p-8">
                 <h3 className="font-serif text-2xl font-bold mb-2">
-                  Explorador
+                  {tPricing('free.name')}
                 </h3>
                 <div className="mb-6">
-                  <span className="text-4xl font-bold">Gratis</span>
+                  <span className="text-4xl font-bold">{tPricing('free.price')}</span>
                 </div>
                 <p className="text-slate-400 mb-6">
-                  Perfecto para comenzar tu primera crónica
+                  {tPricing('free.description')}
                 </p>
 
                 <Button variant="outline" className="w-full mb-8">
-                  Comenzar Gratis
+                  {tPricing('free.cta')}
                 </Button>
 
                 <ul className="space-y-4">
@@ -583,7 +590,7 @@ export default function MyChronicle() {
                       <Check className="w-3 h-3 text-violet-500" />
                     </div>
                     <span className="text-sm text-slate-300">
-                      Acceso a 1 historia
+                      {tPricing('free.feature1')}
                     </span>
                   </li>
                   <li className="flex items-start gap-3">
@@ -591,7 +598,7 @@ export default function MyChronicle() {
                       <Check className="w-3 h-3 text-violet-500" />
                     </div>
                     <span className="text-sm text-slate-300">
-                      20 créditos por día
+                      {tPricing('free.feature2')}
                     </span>
                   </li>
                 </ul>
@@ -601,20 +608,20 @@ export default function MyChronicle() {
             {/* Pro Plan - Featured */}
             <Card className="relative overflow-hidden border-violet-600 shadow-xl shadow-violet-600/20 scale-105">
               <div className="absolute top-0 right-0 bg-violet-600 text-white text-xs font-bold px-4 py-1 rounded-bl-lg">
-                MÁS POPULAR
+                {tPricing('pro.badge')}
               </div>
               <div className="p-8">
-                <h3 className="font-serif text-2xl font-bold mb-2">Cronista</h3>
+                <h3 className="font-serif text-2xl font-bold mb-2">{tPricing('pro.name')}</h3>
                 <div className="mb-6">
-                  <span className="text-4xl font-bold">$4.99</span>
-                  <span className="text-slate-400">/mes</span>
+                  <span className="text-4xl font-bold">{tPricing('pro.price')}</span>
+                  <span className="text-slate-400">{tPricing('pro.period')}</span>
                 </div>
                 <p className="text-slate-400 mb-6">
-                  Para narradores apasionados
+                  {tPricing('pro.description')}
                 </p>
 
                 <Button className="w-full mb-8 shadow-lg shadow-violet-600/30">
-                  Elegir Plan Pro
+                  {tPricing('pro.cta')}
                 </Button>
 
                 <ul className="space-y-4">
@@ -623,7 +630,7 @@ export default function MyChronicle() {
                       <Check className="w-3 h-3 text-white" />
                     </div>
                     <span className="text-sm text-slate-100 font-medium">
-                      100 créditos por día
+                      {tPricing('pro.feature1')}
                     </span>
                   </li>
                   <li className="flex items-start gap-3">
@@ -631,7 +638,7 @@ export default function MyChronicle() {
                       <Check className="w-3 h-3 text-white" />
                     </div>
                     <span className="text-sm text-slate-100 font-medium">
-                      Imagenes en chat
+                      {tPricing('pro.feature2')}
                     </span>
                   </li>
                   <li className="flex items-start gap-3">
@@ -639,7 +646,7 @@ export default function MyChronicle() {
                       <Check className="w-3 h-3 text-white" />
                     </div>
                     <span className="text-sm text-slate-100 font-medium">
-                      2 crónicas al mes
+                      {tPricing('pro.feature3')}
                     </span>
                   </li>
                   <li className="flex items-start gap-3">
@@ -647,7 +654,15 @@ export default function MyChronicle() {
                       <Check className="w-3 h-3 text-white" />
                     </div>
                     <span className="text-sm text-slate-100 font-medium">
-                      Personajes personalizados
+                      {tPricing('pro.feature4')}
+                    </span>
+                  </li>
+                  <li className="flex items-start gap-3">
+                    <div className="w-5 h-5 rounded-full bg-violet-600 flex items-center justify-center flex-shrink-0 mt-0.5">
+                      <Check className="w-3 h-3 text-white" />
+                    </div>
+                    <span className="text-sm text-slate-100 font-medium">
+                      {tPricing('pro.feature5')}
                     </span>
                   </li>
                 </ul>
@@ -657,20 +672,20 @@ export default function MyChronicle() {
             {/* Legend Plan */}
             <Card className="relative overflow-hidden hover:border-violet-700 transition-all bg-gradient-to-br from-slate-900 to-violet-950/30">
               <div className="p-8">
-                <h3 className="font-serif text-2xl font-bold mb-2">Leyenda</h3>
+                <h3 className="font-serif text-2xl font-bold mb-2">{tPricing('legend.name')}</h3>
                 <div className="mb-6">
-                  <span className="text-4xl font-bold">$19.99</span>
-                  <span className="text-slate-400">/mes</span>
+                  <span className="text-4xl font-bold">{tPricing('legend.price')}</span>
+                  <span className="text-slate-400">{tPricing('legend.period')}</span>
                 </div>
                 <p className="text-slate-400 mb-6">
-                  Para autores de sagas épicas
+                  {tPricing('legend.description')}
                 </p>
 
                 <Button
                   variant="outline"
                   className="w-full mb-8 border-violet-600 hover:bg-violet-600"
                 >
-                  Elegir Leyenda
+                  {tPricing('legend.cta')}
                 </Button>
 
                 <ul className="space-y-4">
@@ -679,7 +694,7 @@ export default function MyChronicle() {
                       <Check className="w-3 h-3 text-white" />
                     </div>
                     <span className="text-sm text-slate-100 font-medium">
-                      500 créditos diarios
+                      {tPricing('legend.feature1')}
                     </span>
                   </li>
                   <li className="flex items-start gap-3">
@@ -687,7 +702,7 @@ export default function MyChronicle() {
                       <Check className="w-3 h-3 text-white" />
                     </div>
                     <span className="text-sm text-slate-100 font-medium">
-                      Crónicas ilimitadas
+                      {tPricing('legend.feature2')}
                     </span>
                   </li>
                   <li className="flex items-start gap-3">
@@ -695,7 +710,7 @@ export default function MyChronicle() {
                       <Check className="w-3 h-3 text-white" />
                     </div>
                     <span className="text-sm text-slate-100 font-medium">
-                      Acceso anticipado a nuevas crónicas
+                      {tPricing('legend.feature3')}
                     </span>
                   </li>
                   <li className="flex items-start gap-3">
@@ -703,7 +718,7 @@ export default function MyChronicle() {
                       <Check className="w-3 h-3 text-white" />
                     </div>
                     <span className="text-sm text-slate-100 font-medium">
-                      Generación de imágenes
+                      {tPricing('legend.feature4')}
                     </span>
                   </li>
                   <li className="flex items-start gap-3">
@@ -711,7 +726,7 @@ export default function MyChronicle() {
                       <Check className="w-3 h-3 text-white" />
                     </div>
                     <span className="text-sm text-slate-100 font-medium">
-                      Múltiples personajes
+                      {tPricing('legend.feature5')}
                     </span>
                   </li>
                 </ul>
@@ -726,37 +741,32 @@ export default function MyChronicle() {
         <div className="container mx-auto px-6">
           <div className="text-center mb-16">
             <h2 className="font-serif text-4xl md:text-5xl font-bold mb-6">
-              Preguntas Frecuentes
+              {tFaq('title')}
             </h2>
             <p className="text-xl text-slate-400 max-w-2xl mx-auto">
-              Todo lo que necesitas saber sobre My Chronicle
+              {tFaq('subtitle')}
             </p>
           </div>
 
           <div className="max-w-3xl mx-auto space-y-4">
             <FAQItem
-              question="¿Puedo cambiar de plan en cualquier momento?"
-              answer="Sí, puedes actualizar o degradar tu plan cuando lo desees. Los cambios se reflejan inmediatamente y se prorratean según el tiempo restante de tu ciclo de facturación."
+              question={tFaq('q1.question')}
+              answer={tFaq('q1.answer')}
             />
 
             <FAQItem
-              question="¿Qué sucede con mis historias si cancelo mi suscripción?"
-              answer="Todas tus historias permanecen guardadas en tu biblioteca personal de forma permanente. Con el plan gratuito, seguirás teniendo acceso completo a todas las crónicas que hayas creado, solo se limitarán las nuevas interacciones."
+              question={tFaq('q2.question')}
+              answer={tFaq('q2.answer')}
             />
-            {/*             
-            <FAQItem 
-              question="¿Puedo exportar mis historias?"
-              answer="Los planes Cronista y Leyenda incluyen exportación en formatos PDF y EPUB. Tus historias se formatean profesionalmente como libros digitales con portadas personalizadas y tipografía elegante."
-            /> */}
-
+            
             <FAQItem
-              question="¿Cómo funciona la generación de imágenes?"
-              answer="El plan Leyenda incluye generación de imágenes mediante IA para ilustrar momentos clave de tus historias. Puedes generar ilustraciones de personajes, escenarios y escenas épicas que se integran en tu crónica."
+              question={tFaq('q4.question')}
+              answer={tFaq('q4.answer')}
             />
 
             <FAQItem
-              question="¿Las historias son completamente privadas?"
-              answer="Sí, todas tus historias son 100% privadas por defecto. Solo el plan Leyenda te permite compartir historias públicas si así lo deseas, pero siempre mantienes control total sobre qué compartir."
+              question={tFaq('q5.question')}
+              answer={tFaq('q5.answer')}
             />
           </div>
         </div>
@@ -766,14 +776,14 @@ export default function MyChronicle() {
       <section className="py-24 bg-gradient-to-b from-transparent to-violet-950/20">
         <div className="container mx-auto px-6 text-center">
           <h2 className="font-serif text-4xl md:text-6xl font-bold mb-6">
-            ¿Listo para ser el protagonista?
+            {tCta('title')}
           </h2>
 
           <Button
             size="lg"
             className="text-xl px-12 py-6 h-auto shadow-2xl shadow-violet-600/30 hover:shadow-violet-600/50 transition-all"
           >
-            Comenzar Aventura
+            {tCta('button')}
           </Button>
         </div>
       </section>
@@ -795,25 +805,25 @@ export default function MyChronicle() {
                 href="#"
                 className="text-slate-400 hover:text-white transition-colors text-sm"
               >
-                Términos
+                {tFooter('terms')}
               </a>
               <a
                 href="#"
                 className="text-slate-400 hover:text-white transition-colors text-sm"
               >
-                Privacidad
+                {tFooter('privacy')}
               </a>
               <a
                 href="#"
                 className="text-slate-400 hover:text-white transition-colors text-sm"
               >
-                Twitter
+                {tFooter('twitter')}
               </a>
               <a
                 href="#"
                 className="text-slate-400 hover:text-white transition-colors text-sm"
               >
-                Discord
+                {tFooter('discord')}
               </a>
             </div>
           </div>
