@@ -1,0 +1,158 @@
+{
+  "nav": {
+    "features": "Características",
+    "stories": "Historias",
+    "pricing": "Precios",
+    "faq": "FAQ",
+    "signIn": "Ingresar",
+    "signUp": "Registrarme"
+  },
+  "hero": {
+    "title": "Escribe tu historia,\nuna conversación a la vez",
+    "subtitle": "Tu Crónica Personal. Cada chat es una aventura donde tus decisiones definen la trama. ¿Qué final escribirás?",
+    "cta": "Comenzar mi crónica"
+  },
+  "features": {
+    "title": "Convierte la Interacción en\nHistorial Legendario",
+    "chat": {
+      "title": "Chatea con Personajes Vivos",
+      "description": "Interactúa con narradores de IA que reaccionan a tus elecciones y estilo de diálogo.",
+      "tag": "Conversación dinámica"
+    },
+    "branches": {
+      "title": "Crea Ramas de la Trama",
+      "description": "Cada decisión y respuesta es un punto de bifurcación que te lleva a un final único y personal.",
+      "tag": "Múltiples finales"
+    },
+    "library": {
+      "title": "Tu Biblioteca de Crónicas",
+      "description": "Todas tus aventuras se guardan y formatean como libros digitales para tu colección personal.",
+      "tag": "Colección / Permanencia"
+    }
+  },
+  "demo": {
+    "title": "De Conversación Instantánea\na Prosa Épica",
+    "subtitle": "Elige tu historia y chatea con personajes únicos. Cada conversación se transforma en una crónica épica.",
+    "stories": "Historias Disponibles",
+    "characters": "Personajes Disponibles",
+    "story1": {
+      "title": "El Dragón Olvidado",
+      "description": "Descubre la verdad detrás del último dragón en una aventura de fantasía épica."
+    },
+    "story2": {
+      "title": "Misterio en el Expreso",
+      "description": "Resuelve un asesinato en un tren de lujo mientras viajas por Europa."
+    },
+    "story3": {
+      "title": "La Ciudad Perdida",
+      "description": "Explora ruinas antiguas y descubre secretos de una civilización olvidada."
+    },
+    "story4": {
+      "title": "Romance en París",
+      "description": "Una historia de amor en la ciudad de las luces con finales múltiples."
+    },
+    "character1": {
+      "name": "El Sabio",
+      "role": "Mago ancestral"
+    },
+    "character2": {
+      "name": "La Guerrera",
+      "role": "Campeona invicta"
+    },
+    "character3": {
+      "name": "El Detective",
+      "role": "Investigador astuto"
+    },
+    "character4": {
+      "name": "La Exploradora",
+      "role": "Aventurera audaz"
+    },
+    "character5": {
+      "name": "El Romántico",
+      "role": "Poeta soñador"
+    },
+    "character6": {
+      "name": "El Dragón",
+      "role": "Criatura milenaria"
+    },
+    "startButton": "Comenzar"
+  },
+  "pricing": {
+    "title": "Elige tu Plan de Aventura",
+    "subtitle": "Desde explorador casual hasta cronista legendario. Cada plan desbloquea nuevas posibilidades narrativas.",
+    "free": {
+      "name": "Explorador",
+      "price": "Gratis",
+      "description": "Perfecto para comenzar tu primera crónica",
+      "cta": "Comenzar Gratis",
+      "feature1": "3 historias simultáneas",
+      "feature2": "50 mensajes por día",
+      "feature3": "Biblioteca básica",
+      "feature4": "Género: Aventura clásica"
+    },
+    "pro": {
+      "name": "Cronista",
+      "price": "$9.99",
+      "period": "/mes",
+      "description": "Para narradores apasionados",
+      "cta": "Elegir Plan Pro",
+      "badge": "MÁS POPULAR",
+      "feature1": "Historias ilimitadas",
+      "feature2": "Mensajes ilimitados",
+      "feature3": "Todos los géneros",
+      "feature4": "Exportar PDF/EPUB",
+      "feature5": "Personajes personalizados"
+    },
+    "legend": {
+      "name": "Leyenda",
+      "price": "$19.99",
+      "period": "/mes",
+      "description": "Para autores de sagas épicas",
+      "cta": "Elegir Leyenda",
+      "feature1": "Todo lo de Cronista, más:",
+      "feature2": "IA avanzada (GPT-4)",
+      "feature3": "Generación de imágenes",
+      "feature4": "Múltiples personajes",
+      "feature5": "Soporte premium 24/7"
+    }
+  },
+  "faq": {
+    "title": "Preguntas Frecuentes",
+    "subtitle": "Todo lo que necesitas saber sobre My Chronicle",
+    "q1": {
+      "question": "¿Puedo cambiar de plan en cualquier momento?",
+      "answer": "Sí, puedes actualizar o degradar tu plan cuando lo desees. Los cambios se reflejan inmediatamente y se prorratean según el tiempo restante de tu ciclo de facturación."
+    },
+    "q2": {
+      "question": "¿Qué sucede con mis historias si cancelo mi suscripción?",
+      "answer": "Todas tus historias permanecen guardadas en tu biblioteca personal de forma permanente. Con el plan gratuito, seguirás teniendo acceso completo a todas las crónicas que hayas creado, solo se limitarán las nuevas interacciones."
+    },
+    "q3": {
+      "question": "¿Puedo exportar mis historias?",
+      "answer": "Los planes Cronista y Leyenda incluyen exportación en formatos PDF y EPUB. Tus historias se formatean profesionalmente como libros digitales con portadas personalizadas y tipografía elegante."
+    },
+    "q4": {
+      "question": "¿Cómo funciona la generación de imágenes?",
+      "answer": "El plan Leyenda incluye generación de imágenes mediante IA para ilustrar momentos clave de tus historias. Puedes generar ilustraciones de personajes, escenarios y escenas épicas que se integran en tu crónica."
+    },
+    "q5": {
+      "question": "¿Las historias son completamente privadas?",
+      "answer": "Sí, todas tus historias son 100% privadas por defecto. Solo el plan Leyenda te permite compartir historias públicas si así lo deseas, pero siempre mantienes control total sobre qué compartir."
+    },
+    "q6": {
+      "question": "¿Ofrecen descuentos para estudiantes?",
+      "answer": "Sí, ofrecemos un 40% de descuento en planes Cronista y Leyenda para estudiantes y educadores verificados. Contáctanos con tu credencial académica para más información."
+    }
+  },
+  "cta": {
+    "title": "¿Listo para ser el protagonista?",
+    "subtitle": "Descarga My Chronicle hoy y descubre un universo que espera tus órdenes.",
+    "button": "Comenzar Aventura"
+  },
+  "footer": {
+    "terms": "Términos",
+    "privacy": "Privacidad",
+    "twitter": "Twitter",
+    "discord": "Discord"
+  }
+}

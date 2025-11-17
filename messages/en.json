@@ -1,0 +1,158 @@
+{
+  "nav": {
+    "features": "Features",
+    "stories": "Stories",
+    "pricing": "Pricing",
+    "faq": "FAQ",
+    "signIn": "Sign In",
+    "signUp": "Sign Up"
+  },
+  "hero": {
+    "title": "Write your story,\none conversation at a time",
+    "subtitle": "Your Personal Chronicle. Every chat is an adventure where your decisions define the plot. What ending will you write?",
+    "cta": "Start my chronicle"
+  },
+  "features": {
+    "title": "Turn Interaction into\nLegendary History",
+    "chat": {
+      "title": "Chat with Living Characters",
+      "description": "Interact with AI narrators that react to your choices and dialogue style.",
+      "tag": "Dynamic conversation"
+    },
+    "branches": {
+      "title": "Create Plot Branches",
+      "description": "Every decision and response is a branching point that leads you to a unique and personal ending.",
+      "tag": "Multiple endings"
+    },
+    "library": {
+      "title": "Your Chronicle Library",
+      "description": "All your adventures are saved and formatted as digital books for your personal collection.",
+      "tag": "Collection / Permanence"
+    }
+  },
+  "demo": {
+    "title": "From Instant Conversation\nto Epic Prose",
+    "subtitle": "Choose your story and chat with unique characters. Each conversation transforms into an epic chronicle.",
+    "stories": "Available Stories",
+    "characters": "Available Characters",
+    "story1": {
+      "title": "The Forgotten Dragon",
+      "description": "Discover the truth behind the last dragon in an epic fantasy adventure."
+    },
+    "story2": {
+      "title": "Mystery on the Express",
+      "description": "Solve a murder on a luxury train while traveling through Europe."
+    },
+    "story3": {
+      "title": "The Lost City",
+      "description": "Explore ancient ruins and uncover secrets of a forgotten civilization."
+    },
+    "story4": {
+      "title": "Romance in Paris",
+      "description": "A love story in the city of lights with multiple endings."
+    },
+    "character1": {
+      "name": "The Wise One",
+      "role": "Ancient wizard"
+    },
+    "character2": {
+      "name": "The Warrior",
+      "role": "Undefeated champion"
+    },
+    "character3": {
+      "name": "The Detective",
+      "role": "Clever investigator"
+    },
+    "character4": {
+      "name": "The Explorer",
+      "role": "Bold adventurer"
+    },
+    "character5": {
+      "name": "The Romantic",
+      "role": "Dreamer poet"
+    },
+    "character6": {
+      "name": "The Dragon",
+      "role": "Ancient creature"
+    },
+    "startButton": "Start"
+  },
+  "pricing": {
+    "title": "Choose Your Adventure Plan",
+    "subtitle": "From casual explorer to legendary chronicler. Each plan unlocks new narrative possibilities.",
+    "free": {
+      "name": "Explorer",
+      "price": "Free",
+      "description": "Perfect to start your first chronicle",
+      "cta": "Start Free",
+      "feature1": "3 simultaneous stories",
+      "feature2": "50 messages per day",
+      "feature3": "Basic library",
+      "feature4": "Genre: Classic adventure"
+    },
+    "pro": {
+      "name": "Chronicler",
+      "price": "$9.99",
+      "period": "/mo",
+      "description": "For passionate storytellers",
+      "cta": "Choose Pro Plan",
+      "badge": "MOST POPULAR",
+      "feature1": "Unlimited stories",
+      "feature2": "Unlimited messages",
+      "feature3": "All genres",
+      "feature4": "Export PDF/EPUB",
+      "feature5": "Custom characters"
+    },
+    "legend": {
+      "name": "Legend",
+      "price": "$19.99",
+      "period": "/mo",
+      "description": "For epic saga authors",
+      "cta": "Choose Legend",
+      "feature1": "Everything in Chronicler, plus:",
+      "feature2": "Advanced AI (GPT-4)",
+      "feature3": "Image generation",
+      "feature4": "Multiple characters",
+      "feature5": "Premium 24/7 support"
+    }
+  },
+  "faq": {
+    "title": "Frequently Asked Questions",
+    "subtitle": "Everything you need to know about My Chronicle",
+    "q1": {
+      "question": "Can I change plans at any time?",
+      "answer": "Yes, you can upgrade or downgrade your plan whenever you want. Changes are reflected immediately and prorated based on your remaining billing cycle time."
+    },
+    "q2": {
+      "question": "What happens to my stories if I cancel my subscription?",
+      "answer": "All your stories remain permanently saved in your personal library. With the free plan, you'll still have full access to all the chronicles you've created, only new interactions will be limited."
+    },
+    "q3": {
+      "question": "Can I export my stories?",
+      "answer": "The Chronicler and Legend plans include export in PDF and EPUB formats. Your stories are professionally formatted as digital books with custom covers and elegant typography."
+    },
+    "q4": {
+      "question": "How does image generation work?",
+      "answer": "The Legend plan includes AI image generation to illustrate key moments in your stories. You can generate illustrations of characters, scenarios, and epic scenes that integrate into your chronicle."
+    },
+    "q5": {
+      "question": "Are stories completely private?",
+      "answer": "Yes, all your stories are 100% private by default. Only the Legend plan allows you to share public stories if you wish, but you always maintain full control over what to share."
+    },
+    "q6": {
+      "question": "Do you offer student discounts?",
+      "answer": "Yes, we offer a 40% discount on Chronicler and Legend plans for verified students and educators. Contact us with your academic credentials for more information."
+    }
+  },
+  "cta": {
+    "title": "Ready to be the protagonist?",
+    "subtitle": "Download My Chronicle today and discover a universe waiting for your commands.",
+    "button": "Start Adventure"
+  },
+  "footer": {
+    "terms": "Terms",
+    "privacy": "Privacy",
+    "twitter": "Twitter",
+    "discord": "Discord"
+  }
+}
