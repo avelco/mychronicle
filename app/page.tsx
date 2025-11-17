@@ -1,7 +1,14 @@
 'use client';
 
 import React, { useState } from 'react';
-import { MessageSquare, GitFork, BookOpen, Menu, X, ChevronRight, Play } from 'lucide-react';
+import { MessageSquare, GitFork, BookOpen, Menu, X, ChevronRight, Play, Check } from 'lucide-react';
+import {
+  SignInButton,
+  SignUpButton,
+  SignedIn,
+  SignedOut,
+  UserButton,
+} from '@clerk/nextjs';
 
 interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   children: React.ReactNode;
@@ -41,67 +48,6 @@ const Card = ({ children, className = '' }: CardProps) => (
   </div>
 );
 
-interface TabsProps {
-  children: React.ReactNode;
-  defaultValue: string;
-}
-
-const Tabs = ({ children, defaultValue }: TabsProps) => {
-  const [activeTab, setActiveTab] = useState(defaultValue);
-  
-  return (
-    <div className="w-full">
-      {React.Children.map(children, child =>
-        React.cloneElement(child as React.ReactElement<TabsListProps | TabsContentProps>, { activeTab, setActiveTab })
-      )}
-    </div>
-  );
-};
-
-interface TabsListProps {
-  children: React.ReactNode;
-  activeTab?: string;
-  setActiveTab?: (value: string) => void;
-}
-
-const TabsList = ({ children, activeTab, setActiveTab }: TabsListProps) => (
-  <div className="inline-flex h-12 items-center justify-center rounded-md bg-slate-900 p-1 mb-8">
-    {React.Children.map(children, child =>
-      React.cloneElement(child as React.ReactElement<TabsTriggerProps>, { activeTab, setActiveTab })
-    )}
-  </div>
-);
-
-interface TabsTriggerProps {
-  children: React.ReactNode;
-  value: string;
-  activeTab?: string;
-  setActiveTab?: (value: string) => void;
-}
-
-const TabsTrigger = ({ children, value, activeTab, setActiveTab }: TabsTriggerProps) => (
-  <button
-    onClick={() => setActiveTab?.(value)}
-    className={`inline-flex items-center justify-center whitespace-nowrap rounded-sm px-6 py-2 text-sm font-medium transition-all ${
-      activeTab === value
-        ? 'bg-violet-600 text-white shadow-sm'
-        : 'text-slate-400 hover:text-slate-100'
-    }`}
-  >
-    {children}
-  </button>
-);
-
-interface TabsContentProps {
-  children: React.ReactNode;
-  value: string;
-  activeTab?: string;
-}
-
-const TabsContent = ({ children, value, activeTab }: TabsContentProps) => (
-  activeTab === value ? <div className="mt-2">{children}</div> : null
-);
-
 interface SeparatorProps {
   className?: string;
 }
@@ -109,6 +55,34 @@ interface SeparatorProps {
 const Separator = ({ className = '' }: SeparatorProps) => (
   <div className={`shrink-0 bg-slate-800 h-[1px] w-full ${className}`} />
 );
+
+interface FAQItemProps {
+  question: string;
+  answer: string;
+}
+
+const FAQItem = ({ question, answer }: FAQItemProps) => {
+  const [isOpen, setIsOpen] = useState(false);
+  
+  return (
+    <div 
+      className="rounded-lg border border-slate-800 bg-slate-900/50 backdrop-blur-sm cursor-pointer hover:border-violet-600/50 transition-all"
+      onClick={() => setIsOpen(!isOpen)}
+    >
+      <div className="p-6">
+        <div className="flex items-start justify-between gap-4">
+          <h4 className="font-semibold text-lg text-slate-100 flex-1">{question}</h4>
+          <ChevronRight className={`h-5 w-5 text-violet-500 flex-shrink-0 transition-transform ${isOpen ? 'rotate-90' : ''}`} />
+        </div>
+        {isOpen && (
+          <p className="mt-4 text-slate-400 leading-relaxed">
+            {answer}
+          </p>
+        )}
+      </div>
+    </div>
+  );
+};
 
 export default function MyChronicle() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -136,7 +110,23 @@ export default function MyChronicle() {
           <nav className="hidden md:flex items-center gap-8">
             <a href="#features" className="text-sm text-slate-300 hover:text-white transition-colors">Características</a>
             <a href="#demo" className="text-sm text-slate-300 hover:text-white transition-colors">Historias</a>
-            <Button variant="outline" size="sm">Iniciar Sesión</Button>
+            <a href="#pricing" className="text-sm text-slate-300 hover:text-white transition-colors">Precios</a>
+            <a href="#faq" className="text-sm text-slate-300 hover:text-white transition-colors">FAQ</a>
+            <SignedOut>
+              <SignInButton>
+                <Button variant="outline" size="sm">
+                  Ingresar
+                </Button>
+              </SignInButton>
+              <SignUpButton>
+                <Button size="sm">
+                  Registrarme
+                </Button>
+              </SignUpButton>
+            </SignedOut>
+            <SignedIn>
+              <UserButton />
+            </SignedIn>
           </nav>
 
           {/* Mobile Menu Button */}
@@ -154,7 +144,25 @@ export default function MyChronicle() {
             <nav className="flex flex-col gap-4">
               <a href="#features" className="text-slate-300 hover:text-white transition-colors">Características</a>
               <a href="#demo" className="text-slate-300 hover:text-white transition-colors">Historias</a>
-              <Button variant="outline" className="w-full">Iniciar Sesión</Button>
+              <a href="#pricing" className="text-slate-300 hover:text-white transition-colors">Precios</a>
+              <a href="#faq" className="text-slate-300 hover:text-white transition-colors">FAQ</a>
+              <SignedOut>
+                <SignInButton>
+                  <Button variant="outline" className="w-full">
+                    Ingresar
+                  </Button>
+                </SignInButton>
+                <SignUpButton>
+                  <Button className="w-full">
+                    Registrarme
+                  </Button>
+                </SignUpButton>
+              </SignedOut>
+              <SignedIn>
+                <div className="flex justify-center">
+                  <UserButton />
+                </div>
+              </SignedIn>
             </nav>
           </div>
         )}
@@ -214,12 +222,6 @@ export default function MyChronicle() {
             <Play className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
           </Button>
 
-          <div className="flex items-center justify-center gap-6 mt-8">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src="https://upload.wikimedia.org/wikipedia/commons/3/3c/Download_on_the_App_Store_Badge.svg" alt="App Store" className="h-12 opacity-80 hover:opacity-100 transition-opacity cursor-pointer" />
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src="https://upload.wikimedia.org/wikipedia/commons/7/78/Google_Play_Store_badge_EN.svg" alt="Google Play" className="h-12 opacity-80 hover:opacity-100 transition-opacity cursor-pointer" />
-          </div>
         </div>
       </section>
 
@@ -269,79 +271,356 @@ export default function MyChronicle() {
           </h2>
           
           <p className="text-center text-slate-400 text-lg mb-12 max-w-2xl mx-auto">
-            Mira cómo tus diálogos se transforman automáticamente en una crónica bellamente escrita y guardada para siempre en tu biblioteca.
+            Elige tu historia y chatea con personajes únicos. Cada conversación se transforma en una crónica épica.
           </p>
 
-          <div className="max-w-4xl mx-auto">
-            <Tabs defaultValue="chat">
-              <div className="flex justify-center">
-                <TabsList>
-                  <TabsTrigger value="chat">Conversación (Mecánica)</TabsTrigger>
-                  <TabsTrigger value="narrative">Narrativa (Resultado)</TabsTrigger>
-                </TabsList>
+          <div className="max-w-7xl mx-auto">
+            <div className="grid md:grid-cols-2 gap-8">
+              {/* Left Column - Historias */}
+              <div>
+                <h3 className="font-serif text-2xl font-bold mb-6 text-violet-300">Historias Disponibles</h3>
+                <div className="space-y-6">
+                  {/* Historia 1 */}
+                  <Card className="group hover:border-violet-600/50 transition-all overflow-hidden">
+                    <div className="flex gap-4">
+                      <div className="w-32 h-32 bg-gradient-to-br from-violet-600 to-indigo-800 flex-shrink-0 flex items-center justify-center">
+                        <BookOpen className="h-12 w-12 text-white" />
+                      </div>
+                      <div className="flex-1 flex flex-col justify-between py-2">
+                        <div>
+                          <h4 className="font-serif text-lg font-bold mb-2">El Dragón Olvidado</h4>
+                          <p className="text-sm text-slate-400 line-clamp-2">
+                            Descubre la verdad detrás del último dragón en una aventura de fantasía épica.
+                          </p>
+                        </div>
+                        <Button size="sm" className="self-start mt-2">
+                          Comenzar
+                        </Button>
+                      </div>
+                    </div>
+                  </Card>
+
+                  {/* Historia 2 */}
+                  <Card className="group hover:border-violet-600/50 transition-all overflow-hidden">
+                    <div className="flex gap-4">
+                      <div className="w-32 h-32 bg-gradient-to-br from-amber-600 to-orange-800 flex-shrink-0 flex items-center justify-center">
+                        <MessageSquare className="h-12 w-12 text-white" />
+                      </div>
+                      <div className="flex-1 flex flex-col justify-between py-2">
+                        <div>
+                          <h4 className="font-serif text-lg font-bold mb-2">Misterio en el Expreso</h4>
+                          <p className="text-sm text-slate-400 line-clamp-2">
+                            Resuelve un asesinato en un tren de lujo mientras viajas por Europa.
+                          </p>
+                        </div>
+                        <Button size="sm" className="self-start mt-2">
+                          Comenzar
+                        </Button>
+                      </div>
+                    </div>
+                  </Card>
+
+                  {/* Historia 3 */}
+                  <Card className="group hover:border-violet-600/50 transition-all overflow-hidden">
+                    <div className="flex gap-4">
+                      <div className="w-32 h-32 bg-gradient-to-br from-emerald-600 to-teal-800 flex-shrink-0 flex items-center justify-center">
+                        <GitFork className="h-12 w-12 text-white" />
+                      </div>
+                      <div className="flex-1 flex flex-col justify-between py-2">
+                        <div>
+                          <h4 className="font-serif text-lg font-bold mb-2">La Ciudad Perdida</h4>
+                          <p className="text-sm text-slate-400 line-clamp-2">
+                            Explora ruinas antiguas y descubre secretos de una civilización olvidada.
+                          </p>
+                        </div>
+                        <Button size="sm" className="self-start mt-2">
+                          Comenzar
+                        </Button>
+                      </div>
+                    </div>
+                  </Card>
+
+                  {/* Historia 4 */}
+                  <Card className="group hover:border-violet-600/50 transition-all overflow-hidden">
+                    <div className="flex gap-4">
+                      <div className="w-32 h-32 bg-gradient-to-br from-rose-600 to-pink-800 flex-shrink-0 flex items-center justify-center">
+                        <Play className="h-12 w-12 text-white" />
+                      </div>
+                      <div className="flex-1 flex flex-col justify-between py-2">
+                        <div>
+                          <h4 className="font-serif text-lg font-bold mb-2">Romance en París</h4>
+                          <p className="text-sm text-slate-400 line-clamp-2">
+                            Una historia de amor en la ciudad de las luces con finales múltiples.
+                          </p>
+                        </div>
+                        <Button size="sm" className="self-start mt-2">
+                          Comenzar
+                        </Button>
+                      </div>
+                    </div>
+                  </Card>
+                </div>
               </div>
 
-              <TabsContent value="chat">
-                <Card className="p-8">
-                  <div className="space-y-6 max-w-2xl mx-auto">
-                    <div className="flex items-start gap-3">
-                      <div className="w-10 h-10 rounded-full bg-violet-600 flex items-center justify-center">AI</div>
-                      <div className="flex-1 bg-slate-800 rounded-2xl rounded-tl-sm p-4">
-                        <p>La puerta antigua cruje. ¿Entras a la torre olvidada?</p>
-                      </div>
+              {/* Right Column - Avatares de Chat */}
+              <div>
+                <h3 className="font-serif text-2xl font-bold mb-6 text-violet-300">Personajes Disponibles</h3>
+                <div className="grid grid-cols-2 gap-4">
+                  {/* Avatar 1 */}
+                  <Card className="group hover:border-violet-600/50 transition-all text-center">
+                    <div className="w-full aspect-square bg-gradient-to-br from-violet-600 to-purple-800 rounded-lg mb-3 flex items-center justify-center">
+                      <span className="text-4xl">🧙‍♂️</span>
                     </div>
-                    
-                    <div className="flex items-start gap-3 justify-end">
-                      <div className="flex-1 bg-violet-600 rounded-2xl rounded-tr-sm p-4 max-w-sm ml-auto">
-                        <p className="text-right">Sí, con cautela empujo la puerta</p>
-                      </div>
-                      <div className="w-10 h-10 rounded-full bg-slate-700 flex items-center justify-center">Tú</div>
-                    </div>
+                    <h4 className="font-semibold text-sm mb-1">El Sabio</h4>
+                    <p className="text-xs text-slate-400">Mago ancestral</p>
+                  </Card>
 
-                    <div className="flex items-start gap-3">
-                      <div className="w-10 h-10 rounded-full bg-violet-600 flex items-center justify-center">AI</div>
-                      <div className="flex-1 bg-slate-800 rounded-2xl rounded-tl-sm p-4">
-                        <p>La luz de la luna ilumina un libro abierto en un pedestal de piedra.</p>
-                      </div>
+                  {/* Avatar 2 */}
+                  <Card className="group hover:border-violet-600/50 transition-all text-center">
+                    <div className="w-full aspect-square bg-gradient-to-br from-red-600 to-orange-800 rounded-lg mb-3 flex items-center justify-center">
+                      <span className="text-4xl">⚔️</span>
                     </div>
+                    <h4 className="font-semibold text-sm mb-1">La Guerrera</h4>
+                    <p className="text-xs text-slate-400">Campeona invicta</p>
+                  </Card>
 
-                    <div className="flex items-start gap-3 justify-end">
-                      <div className="flex-1 bg-violet-600 rounded-2xl rounded-tr-sm p-4 max-w-sm ml-auto">
-                        <p className="text-right">Me acerco para leer sus páginas</p>
-                      </div>
-                      <div className="w-10 h-10 rounded-full bg-slate-700 flex items-center justify-center">Tú</div>
+                  {/* Avatar 3 */}
+                  <Card className="group hover:border-violet-600/50 transition-all text-center">
+                    <div className="w-full aspect-square bg-gradient-to-br from-amber-600 to-yellow-800 rounded-lg mb-3 flex items-center justify-center">
+                      <span className="text-4xl">🕵️</span>
                     </div>
-                  </div>
-                </Card>
-              </TabsContent>
+                    <h4 className="font-semibold text-sm mb-1">El Detective</h4>
+                    <p className="text-xs text-slate-400">Investigador astuto</p>
+                  </Card>
 
-              <TabsContent value="narrative">
-                <Card className="p-12 bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900">
-                  <div className="font-serif text-lg leading-loose space-y-6 max-w-3xl mx-auto">
-                    <div className="text-center mb-8">
-                      <h3 className="text-3xl font-bold text-violet-300 mb-2">Capítulo III</h3>
-                      <p className="text-slate-500 text-sm uppercase tracking-wider">La Torre Olvidada</p>
+                  {/* Avatar 4 */}
+                  <Card className="group hover:border-violet-600/50 transition-all text-center">
+                    <div className="w-full aspect-square bg-gradient-to-br from-emerald-600 to-green-800 rounded-lg mb-3 flex items-center justify-center">
+                      <span className="text-4xl">🗺️</span>
                     </div>
-                    
-                    <p className="text-slate-200">
-                      La puerta antigua crujió bajo el peso de los siglos cuando la empujé con cautela. Sus bisagras protestaron, pero cedieron, revelando las sombras que habitaban el interior de la torre olvidada.
-                    </p>
-                    
-                    <p className="text-slate-200">
-                      La luz plateada de la luna se derramaba a través de una grieta en el techo, iluminando como un foco celestial un libro abierto que descansaba sobre un pedestal de piedra. Sus páginas amarillentas parecían susurrar secretos ancestrales.
-                    </p>
-                    
-                    <p className="text-slate-200">
-                      Me acerqué con pasos que resonaban en el silencio absoluto, cada eco una declaración de mi presencia en aquel lugar sagrado. Las palabras en el libro comenzaron a brillar con un fulgor dorado cuando mis ojos las contemplaron...
-                    </p>
+                    <h4 className="font-semibold text-sm mb-1">La Exploradora</h4>
+                    <p className="text-xs text-slate-400">Aventurera audaz</p>
+                  </Card>
 
-                    <div className="text-center mt-8 pt-8 border-t border-slate-700">
-                      <p className="text-slate-500 text-sm italic">La historia continúa...</p>
+                  {/* Avatar 5 */}
+                  <Card className="group hover:border-violet-600/50 transition-all text-center">
+                    <div className="w-full aspect-square bg-gradient-to-br from-rose-600 to-pink-800 rounded-lg mb-3 flex items-center justify-center">
+                      <span className="text-4xl">💕</span>
                     </div>
-                  </div>
-                </Card>
-              </TabsContent>
-            </Tabs>
+                    <h4 className="font-semibold text-sm mb-1">El Romántico</h4>
+                    <p className="text-xs text-slate-400">Poeta soñador</p>
+                  </Card>
+
+                  {/* Avatar 6 */}
+                  <Card className="group hover:border-violet-600/50 transition-all text-center">
+                    <div className="w-full aspect-square bg-gradient-to-br from-slate-600 to-gray-800 rounded-lg mb-3 flex items-center justify-center">
+                      <span className="text-4xl">🐉</span>
+                    </div>
+                    <h4 className="font-semibold text-sm mb-1">El Dragón</h4>
+                    <p className="text-xs text-slate-400">Criatura milenaria</p>
+                  </Card>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Pricing Section */}
+      <section id="pricing" className="py-24 bg-slate-900/30">
+        <div className="container mx-auto px-6">
+          <div className="text-center mb-16">
+            <h2 className="font-serif text-4xl md:text-5xl font-bold mb-6">
+              Elige tu Plan de Aventura
+            </h2>
+            <p className="text-xl text-slate-400 max-w-2xl mx-auto">
+              Desde explorador casual hasta cronista legendario. Cada plan desbloquea nuevas posibilidades narrativas.
+            </p>
+          </div>
+
+          <div className="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
+            {/* Free Plan */}
+            <Card className="relative overflow-hidden hover:border-slate-700 transition-all">
+              <div className="p-8">
+                <h3 className="font-serif text-2xl font-bold mb-2">Explorador</h3>
+                <div className="mb-6">
+                  <span className="text-4xl font-bold">Gratis</span>
+                </div>
+                <p className="text-slate-400 mb-6">Perfecto para comenzar tu primera crónica</p>
+                
+                <Button variant="outline" className="w-full mb-8">Comenzar Gratis</Button>
+                
+                <ul className="space-y-4">
+                  <li className="flex items-start gap-3">
+                    <div className="w-5 h-5 rounded-full bg-violet-600/20 flex items-center justify-center flex-shrink-0 mt-0.5">
+                      <Check className="w-3 h-3 text-violet-500" />
+                    </div>
+                    <span className="text-sm text-slate-300">3 historias simultáneas</span>
+                  </li>
+                  <li className="flex items-start gap-3">
+                    <div className="w-5 h-5 rounded-full bg-violet-600/20 flex items-center justify-center flex-shrink-0 mt-0.5">
+                      <Check className="w-3 h-3 text-violet-500" />
+                    </div>
+                    <span className="text-sm text-slate-300">50 mensajes por día</span>
+                  </li>
+                  <li className="flex items-start gap-3">
+                    <div className="w-5 h-5 rounded-full bg-violet-600/20 flex items-center justify-center flex-shrink-0 mt-0.5">
+                      <Check className="w-3 h-3 text-violet-500" />
+                    </div>
+                    <span className="text-sm text-slate-300">Biblioteca básica</span>
+                  </li>
+                  <li className="flex items-start gap-3">
+                    <div className="w-5 h-5 rounded-full bg-violet-600/20 flex items-center justify-center flex-shrink-0 mt-0.5">
+                      <Check className="w-3 h-3 text-violet-500" />
+                    </div>
+                    <span className="text-sm text-slate-300">Género: Aventura clásica</span>
+                  </li>
+                </ul>
+              </div>
+            </Card>
+
+            {/* Pro Plan - Featured */}
+            <Card className="relative overflow-hidden border-violet-600 shadow-xl shadow-violet-600/20 scale-105">
+              <div className="absolute top-0 right-0 bg-violet-600 text-white text-xs font-bold px-4 py-1 rounded-bl-lg">
+                MÁS POPULAR
+              </div>
+              <div className="p-8">
+                <h3 className="font-serif text-2xl font-bold mb-2">Cronista</h3>
+                <div className="mb-6">
+                  <span className="text-4xl font-bold">$9.99</span>
+                  <span className="text-slate-400">/mes</span>
+                </div>
+                <p className="text-slate-400 mb-6">Para narradores apasionados</p>
+                
+                <Button className="w-full mb-8 shadow-lg shadow-violet-600/30">Elegir Plan Pro</Button>
+                
+                <ul className="space-y-4">
+                  <li className="flex items-start gap-3">
+                    <div className="w-5 h-5 rounded-full bg-violet-600 flex items-center justify-center flex-shrink-0 mt-0.5">
+                      <Check className="w-3 h-3 text-white" />
+                    </div>
+                    <span className="text-sm text-slate-100 font-medium">Historias ilimitadas</span>
+                  </li>
+                  <li className="flex items-start gap-3">
+                    <div className="w-5 h-5 rounded-full bg-violet-600 flex items-center justify-center flex-shrink-0 mt-0.5">
+                      <Check className="w-3 h-3 text-white" />
+                    </div>
+                    <span className="text-sm text-slate-100 font-medium">Mensajes ilimitados</span>
+                  </li>
+                  <li className="flex items-start gap-3">
+                    <div className="w-5 h-5 rounded-full bg-violet-600 flex items-center justify-center flex-shrink-0 mt-0.5">
+                      <Check className="w-3 h-3 text-white" />
+                    </div>
+                    <span className="text-sm text-slate-100 font-medium">Todos los géneros</span>
+                  </li>
+                  <li className="flex items-start gap-3">
+                    <div className="w-5 h-5 rounded-full bg-violet-600 flex items-center justify-center flex-shrink-0 mt-0.5">
+                      <Check className="w-3 h-3 text-white" />
+                    </div>
+                    <span className="text-sm text-slate-100 font-medium">Exportar PDF/EPUB</span>
+                  </li>
+                  <li className="flex items-start gap-3">
+                    <div className="w-5 h-5 rounded-full bg-violet-600 flex items-center justify-center flex-shrink-0 mt-0.5">
+                      <Check className="w-3 h-3 text-white" />
+                    </div>
+                    <span className="text-sm text-slate-100 font-medium">Personajes personalizados</span>
+                  </li>
+                </ul>
+              </div>
+            </Card>
+
+            {/* Legend Plan */}
+            <Card className="relative overflow-hidden hover:border-violet-700 transition-all bg-gradient-to-br from-slate-900 to-violet-950/30">
+              <div className="p-8">
+                <h3 className="font-serif text-2xl font-bold mb-2">Leyenda</h3>
+                <div className="mb-6">
+                  <span className="text-4xl font-bold">$19.99</span>
+                  <span className="text-slate-400">/mes</span>
+                </div>
+                <p className="text-slate-400 mb-6">Para autores de sagas épicas</p>
+                
+                <Button variant="outline" className="w-full mb-8 border-violet-600 hover:bg-violet-600">Elegir Leyenda</Button>
+                
+                <ul className="space-y-4">
+                  <li className="flex items-start gap-3">
+                    <div className="w-5 h-5 rounded-full bg-violet-600 flex items-center justify-center flex-shrink-0 mt-0.5">
+                      <Check className="w-3 h-3 text-white" />
+                    </div>
+                    <span className="text-sm text-slate-100 font-medium">Todo lo de Cronista, más:</span>
+                  </li>
+                  <li className="flex items-start gap-3">
+                    <div className="w-5 h-5 rounded-full bg-gradient-to-r from-violet-600 to-indigo-600 flex items-center justify-center flex-shrink-0 mt-0.5">
+                      <Check className="w-3 h-3 text-white" />
+                    </div>
+                    <span className="text-sm text-slate-100 font-medium">IA avanzada (GPT-4)</span>
+                  </li>
+                  <li className="flex items-start gap-3">
+                    <div className="w-5 h-5 rounded-full bg-gradient-to-r from-violet-600 to-indigo-600 flex items-center justify-center flex-shrink-0 mt-0.5">
+                      <Check className="w-3 h-3 text-white" />
+                    </div>
+                    <span className="text-sm text-slate-100 font-medium">Generación de imágenes</span>
+                  </li>
+                  <li className="flex items-start gap-3">
+                    <div className="w-5 h-5 rounded-full bg-gradient-to-r from-violet-600 to-indigo-600 flex items-center justify-center flex-shrink-0 mt-0.5">
+                      <Check className="w-3 h-3 text-white" />
+                    </div>
+                    <span className="text-sm text-slate-100 font-medium">Múltiples personajes</span>
+                  </li>
+                  <li className="flex items-start gap-3">
+                    <div className="w-5 h-5 rounded-full bg-gradient-to-r from-violet-600 to-indigo-600 flex items-center justify-center flex-shrink-0 mt-0.5">
+                      <Check className="w-3 h-3 text-white" />
+                    </div>
+                    <span className="text-sm text-slate-100 font-medium">Soporte premium 24/7</span>
+                  </li>
+                </ul>
+              </div>
+            </Card>
+          </div>
+        </div>
+      </section>
+
+      {/* FAQ Section */}
+      <section id="faq" className="py-24">
+        <div className="container mx-auto px-6">
+          <div className="text-center mb-16">
+            <h2 className="font-serif text-4xl md:text-5xl font-bold mb-6">
+              Preguntas Frecuentes
+            </h2>
+            <p className="text-xl text-slate-400 max-w-2xl mx-auto">
+              Todo lo que necesitas saber sobre My Chronicle
+            </p>
+          </div>
+
+          <div className="max-w-3xl mx-auto space-y-4">
+            <FAQItem 
+              question="¿Puedo cambiar de plan en cualquier momento?"
+              answer="Sí, puedes actualizar o degradar tu plan cuando lo desees. Los cambios se reflejan inmediatamente y se prorratean según el tiempo restante de tu ciclo de facturación."
+            />
+            
+            <FAQItem 
+              question="¿Qué sucede con mis historias si cancelo mi suscripción?"
+              answer="Todas tus historias permanecen guardadas en tu biblioteca personal de forma permanente. Con el plan gratuito, seguirás teniendo acceso completo a todas las crónicas que hayas creado, solo se limitarán las nuevas interacciones."
+            />
+            
+            <FAQItem 
+              question="¿Puedo exportar mis historias?"
+              answer="Los planes Cronista y Leyenda incluyen exportación en formatos PDF y EPUB. Tus historias se formatean profesionalmente como libros digitales con portadas personalizadas y tipografía elegante."
+            />
+            
+            <FAQItem 
+              question="¿Cómo funciona la generación de imágenes?"
+              answer="El plan Leyenda incluye generación de imágenes mediante IA para ilustrar momentos clave de tus historias. Puedes generar ilustraciones de personajes, escenarios y escenas épicas que se integran en tu crónica."
+            />
+            
+            <FAQItem 
+              question="¿Las historias son completamente privadas?"
+              answer="Sí, todas tus historias son 100% privadas por defecto. Solo el plan Leyenda te permite compartir historias públicas si así lo deseas, pero siempre mantienes control total sobre qué compartir."
+            />
+            
+            <FAQItem 
+              question="¿Ofrecen descuentos para estudiantes?"
+              answer="Sí, ofrecemos un 40% de descuento en planes Cronista y Leyenda para estudiantes y educadores verificados. Contáctanos con tu credencial académica para más información."
+            />
           </div>
         </div>
       </section>
