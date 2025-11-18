@@ -1,0 +1,183 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client"
+  output   = "../lib/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// --- Enums ---
+
+/// Defines whether a story is pre-built or dynamically generated.
+enum StoryType {
+  STATIC     // Human-built, uses Scenes and Decisions.
+  DYNAMIC_AI // AI-generated, uses the PlaythroughLog.
+}
+
+enum Role {
+  USER
+  AUTHOR
+  ADMIN
+}
+
+// --- CORE TABLES ---
+
+model User {
+  id       String  @id @default(cuid())
+  email    String  @unique
+  password String
+  firstName     String
+  lastName String?
+  userName String   @unique
+  role     Role     @default(USER)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  // Relations
+  author   Author?
+  playthroughs Playthrough[]  
+}
+
+model Author {
+  id        String    @id @default(uuid())
+  name      String
+  bio       String?
+
+  // Relation to User (1-to-1, nullable for system/AI authors)
+  userId    String?   @unique
+  user      User?     @relation(fields: [userId], references: [id])
+
+  // Relations
+  chronicles Chronicle[]
+  images     Image[]
+}
+
+// --- CONTENT DEFINITION TABLES ---
+
+model Chronicle {
+  id            String    @id @default(uuid())
+  title         String
+  description   String    @db.Text
+  coverImageUrl String
+  type          StoryType // STATIC or DYNAMIC_AI
+  isPublished   Boolean   @default(false)
+  createdAt     DateTime  @default(now())
+
+  // Foreign Keys
+  authorId      String
+  author        Author    @relation(fields: [authorId], references: [id])
+
+  // Starting Scene (Only for STATIC stories)
+  startSceneId  String?   @unique
+  startScene    Scene?    @relation("StartScene", fields: [startSceneId], references: [id])
+
+  // Relations
+  scenes     Scene[]
+  playthroughs Playthrough[]
+}
+
+model Image {
+  id              String   @id @default(uuid())
+  url             String   @unique
+  altText         String?
+  isAiGenerated   Boolean  @default(false)
+
+  // Relation to Author
+  authorId        String?
+  author          Author?  @relation(fields: [authorId], references: [id])
+
+  // Relations
+  scenes Scene[]
+}
+
+// --- STATIC STORY STRUCTURE (Node-Graph) ---
+
+/// A single step or narrative screen in a STATIC story.
+model Scene {
+  id        String @id @default(uuid())
+  content   String @db.Text // The story text, may contain {{variables}}
+
+  // Foreign Keys
+  chronicleId String
+  chronicle   Chronicle @relation(fields: [chronicleId], references: [id], onDelete: Cascade)
+
+  imageId   String?
+  image     Image?    @relation(fields: [imageId], references: [id])
+
+  // Relations (Branching)
+  // Decisions originating from this scene
+  outgoingDecisions Decision[] @relation("FromScene")
+  // Decisions leading into this scene
+  incomingDecisions Decision[] @relation("ToScene")
+
+  // Relations for Playthrough Tracking
+  currentPlaythroughs Playthrough[]
+  isStartingSceneFor  Chronicle?     @relation("StartScene")
+}
+
+/// The choice/link between scenes in a STATIC story.
+model Decision {
+  id    String @id @default(uuid())
+  text  String // The button text
+
+  // Advanced Personalization Logic
+  conditions Json? // E.g., {"inventory": {"has": "golden_key"}}
+  actions    Json? // E.g., {"stats": {"strength": -1}}
+
+  // Foreign Keys (Defines the link)
+  fromSceneId String
+  fromScene   Scene  @relation("FromScene", fields: [fromSceneId], references: [id], onDelete: Cascade)
+
+  toSceneId   String
+  toScene     Scene  @relation("ToScene", fields: [toSceneId], references: [id], onDelete: Cascade)
+}
+
+// --- PLAYTHROUGH TABLES (User Game State) ---
+
+/// Represents a single user's session playing a Chronicle.
+model Playthrough {
+  id             String    @id @default(uuid())
+  startedAt      DateTime  @default(now())
+  completedAt    DateTime?
+  // CORE PERSONALIZATION STATE: E.g., {"name": "Alex", "inventory": ["map"]}
+  currentState   Json
+
+  // Foreign Keys
+  userId         String
+  user           User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  chronicleId    String
+  chronicle      Chronicle @relation(fields: [chronicleId], references: [id], onDelete: Cascade)
+
+  // Current state for STATIC stories
+  currentSceneId String?
+  currentScene   Scene?    @relation(fields: [currentSceneId], references: [id])
+
+  // Logs for DYNAMIC_AI stories
+  aiLogs PlaythroughLogAI[]
+}
+
+/// Log for dynamically generated (AI) stories.
+model PlaythroughLogAI {
+  id                String   @id @default(uuid())
+  order             Int      // 1, 2, 3... sequence of interaction
+  generatedContent  String   @db.Text
+  generatedImageUrl String?
+  userInput         String   @db.Text // What the user typed or selected
+  createdAt         DateTime @default(now())
+
+  // Foreign Key
+  playthroughId     String
+  playthrough       Playthrough @relation(fields: [playthroughId], references: [id], onDelete: Cascade)
+
+  // Index for fast query of a specific playthrough's history
+  @@index([playthroughId, order])
+}

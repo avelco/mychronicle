@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { ClerkProvider } from "@clerk/nextjs";
 import { Geist, Geist_Mono } from "next/font/google";
-import "../globals.css";
+import "./globals.css";
 import { esMX } from "@clerk/localizations";
 import { NextIntlClientProvider } from "next-intl";
 import { getMessages } from "next-intl/server";
