@@ -8,6 +8,10 @@ import {
   Check,
   Sparkles,
 } from "lucide-react";
+import { useTranslations } from "next-intl";
+import { useRouter, useParams } from "next/navigation";
+import { completeOnboarding } from "./_actions";
+import { useUser } from "@clerk/nextjs";
 
 interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   children: React.ReactNode;
@@ -67,96 +71,103 @@ const OnboardingPage = () => {
   const [step, setStep] = useState(1);
   const [selectedGender, setSelectedGender] = useState<string>("");
   const [selectedTopics, setSelectedTopics] = useState<string[]>([]);
+  const [error, setError] = React.useState('')
+  const { user } = useUser();
+
+  const t = useTranslations('onboarding');
+  const router = useRouter();
+  const params = useParams();
+  const locale = params.locale as string;
 
   const genderOptions = [
-    { id: "male", label: "Male", emoji: "👨" },
-    { id: "female", label: "Female", emoji: "👩" },
-    { id: "prefer-not", label: "Prefer not to say", emoji: "✨" },
+    { id: "male", label: t('step1.male'), emoji: "👨" },
+    { id: "female", label: t('step1.female'), emoji: "👩" },
+    { id: "prefer-not", label: t('step1.preferNot'), emoji: "✨" },
   ];
 
   const topicOptions = [
     {
       id: "adventure",
-      label: "Adventure",
+      label: t('topics.adventure.label'),
       emoji: "🗺️",
-      description: "Epic quests and exploration",
+      description: t('topics.adventure.description'),
       gradient: "from-amber-600 to-orange-800",
     },
     {
       id: "romance",
-      label: "Romance",
+      label: t('topics.romance.label'),
       emoji: "💕",
-      description: "Love stories and relationships",
+      description: t('topics.romance.description'),
       gradient: "from-rose-600 to-pink-800",
     },
     {
       id: "mystery",
-      label: "Mystery",
+      label: t('topics.mystery.label'),
       emoji: "🔍",
-      description: "Puzzles and detective stories",
+      description: t('topics.mystery.description'),
       gradient: "from-indigo-600 to-purple-800",
     },
     {
       id: "fantasy",
-      label: "Fantasy",
+      label: t('topics.fantasy.label'),
       emoji: "🧙‍♂️",
-      description: "Magic and mythical worlds",
+      description: t('topics.fantasy.description'),
       gradient: "from-violet-600 to-purple-800",
     },
     {
       id: "scifi",
-      label: "Sci-Fi",
+      label: t('topics.scifi.label'),
       emoji: "🚀",
-      description: "Future and technology",
+      description: t('topics.scifi.description'),
       gradient: "from-cyan-600 to-blue-800",
     },
     {
       id: "horror",
-      label: "Horror",
+      label: t('topics.horror.label'),
       emoji: "👻",
-      description: "Thrills and supernatural",
+      description: t('topics.horror.description'),
       gradient: "from-slate-600 to-gray-900",
     },
     {
       id: "action",
-      label: "Action",
+      label: t('topics.action.label'),
       emoji: "⚔️",
-      description: "Combat and excitement",
+      description: t('topics.action.description'),
       gradient: "from-red-600 to-orange-800",
     },
     {
       id: "drama",
-      label: "Drama",
+      label: t('topics.drama.label'),
       emoji: "🎭",
-      description: "Emotional and character-driven",
+      description: t('topics.drama.description'),
       gradient: "from-purple-600 to-indigo-800",
     },
     {
       id: "school",
-      label: "School Life",
+      label: t('topics.school.label'),
       emoji: "🎓",
-      description: "Campus and education",
+      description: t('topics.school.description'),
       gradient: "from-emerald-600 to-teal-800",
     },
     {
       id: "isekai",
-      label: "Isekai",
+      label: t('topics.isekai.label'),
       emoji: "🌟",
-      description: "Transported to another world",
+      description: t('topics.isekai.description'),
       gradient: "from-yellow-600 to-amber-800",
     },
     {
       id: "comedy",
-      label: "Comedy",
+      label: t('topics.comedy.label'),
       emoji: "😂",
-      description: "Humor and fun",
+      description: t('topics.comedy.description'),
       gradient: "from-lime-600 to-green-800",
     },
     {
-      id: "slice-of-life",
-      label: "Slice of Life",
+      id: "sliceOfLife",
+      label: t('topics.sliceOfLife.label'),
       emoji: "☕",
-      description: "Everyday moments",
+      description: t('topics.sliceOfLife.description'),
       gradient: "from-orange-600 to-red-700",
     },
   ];
@@ -169,13 +180,17 @@ const OnboardingPage = () => {
     }
   };
 
-  const handleNext = () => {
+  const handleNext = async () => {
     if (step === 1 && selectedGender) {
       setStep(2);
     } else if (step === 2 && selectedTopics.length > 0) {
-      // Submit and redirect to main app
+      // Call your completeOnboarding action here
+      // const res = await completeOnboarding({ selectedGender, selectedTopics });
       console.log("Onboarding complete:", { selectedGender, selectedTopics });
-      alert("Onboarding complete! Redirecting to your personalized experience...");
+      handleSubmit(selectedGender, selectedTopics)
+      
+      // Redirect to main app with locale
+      // router.push(`/${locale}/dashboard`);
     }
   };
 
@@ -186,6 +201,18 @@ const OnboardingPage = () => {
   };
 
   const canProceed = step === 1 ? selectedGender : selectedTopics.length > 0;
+
+    const handleSubmit = async (selectedGender: string, selectedTopics: string[]) => {
+    const res = await completeOnboarding(selectedGender, selectedTopics)
+    if (res?.message) {
+      // Reloads the user's data from the Clerk API
+      await user?.reload()
+      router.push('/')
+    }
+    if (res?.error) {
+      setError(res?.error)
+    }
+  }
 
   return (
     <div className="min-h-screen bg-slate-950 text-slate-100">
@@ -222,18 +249,16 @@ const OnboardingPage = () => {
           <div className="inline-flex items-center gap-2 bg-violet-600/10 border border-violet-600/20 rounded-full px-4 py-2 mb-6">
             <Sparkles className="h-4 w-4 text-violet-400" />
             <span className="text-sm text-violet-300 font-medium">
-              Step {step} of 2
+              {t('step')} {step} {t('of')} 2
             </span>
           </div>
           
           <h1 className="font-serif text-4xl md:text-6xl font-bold mb-4 bg-gradient-to-r from-white via-violet-100 to-slate-300 bg-clip-text text-transparent">
-            {step === 1 ? "Welcome to Your Journey" : "Choose Your Interests"}
+            {step === 1 ? t('step1.title') : t('step2.title')}
           </h1>
           
           <p className="text-lg md:text-xl text-slate-400 max-w-2xl mx-auto">
-            {step === 1
-              ? "Let's personalize your storytelling experience. First, tell us about yourself."
-              : "Select the genres and themes you'd like to explore. Choose as many as you like!"}
+            {step === 1 ? t('step1.subtitle') : t('step2.subtitle')}
           </p>
         </div>
 
@@ -242,7 +267,7 @@ const OnboardingPage = () => {
           <div className="max-w-3xl mx-auto">
             <div className="mb-8">
               <h2 className="text-2xl font-semibold mb-6 text-center">
-                How would you like to be addressed?
+                {t('step1.question')}
               </h2>
               
               <div className="grid md:grid-cols-2 gap-4">
@@ -281,10 +306,8 @@ const OnboardingPage = () => {
               <div className="text-center mb-6">
                 <p className="text-slate-400">
                   {selectedTopics.length === 0
-                    ? "Select at least one topic to continue"
-                    : `${selectedTopics.length} topic${
-                        selectedTopics.length > 1 ? "s" : ""
-                      } selected`}
+                    ? t('step2.noSelection')
+                    : t('step2.selectedCount', { count: selectedTopics.length })}
                 </p>
               </div>
 
@@ -336,7 +359,7 @@ const OnboardingPage = () => {
             className={step === 1 ? "invisible" : ""}
           >
             <ChevronLeft className="w-5 h-5 mr-2" />
-            Back
+            {t('navigation.back')}
           </Button>
 
           <Button
@@ -345,7 +368,7 @@ const OnboardingPage = () => {
             disabled={!canProceed}
             className="group"
           >
-            {step === 2 ? "Complete Setup" : "Continue"}
+            {step === 2 ? t('navigation.complete') : t('navigation.continue')}
             <ChevronRight className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" />
           </Button>
         </div>
@@ -354,9 +377,7 @@ const OnboardingPage = () => {
         {!canProceed && (
           <div className="text-center mt-6">
             <p className="text-sm text-slate-500">
-              {step === 1
-                ? "Please select an option to continue"
-                : "Please select at least one topic to continue"}
+              {step === 1 ? t('navigation.selectOption') : t('navigation.selectTopic')}
             </p>
           </div>
         )}

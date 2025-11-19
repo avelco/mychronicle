@@ -3,7 +3,6 @@ import { ClerkProvider } from "@clerk/nextjs";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { esMX } from "@clerk/localizations";
-import { NextIntlClientProvider } from "next-intl";
 import { getMessages } from "next-intl/server";
 
 const geistSans = Geist({
@@ -38,9 +37,7 @@ export default async function RootLayout({
         <body
           className={`${geistSans.variable} ${geistMono.variable} antialiased`}
         >
-          <NextIntlClientProvider messages={messages}>
             {children}
-          </NextIntlClientProvider>
         </body>
       </html>
     </ClerkProvider>

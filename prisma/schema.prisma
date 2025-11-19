@@ -28,46 +28,73 @@ enum Role {
   ADMIN
 }
 
+// --- ADDED: Language Enum ---
+/// Defines the supported languages for content.
+enum Language {
+  EN // English
+  ES // Spanish
+  // Add more languages here, e.g., FR, DE
+}
+
+
 // --- CORE TABLES ---
 
 model User {
-  id       String  @id @default(cuid())
-  email    String  @unique
-  password String
+  id            String   @id @default(cuid())
+  email         String   @unique
+  password      String
   firstName     String
-  lastName String?
-  userName String   @unique
-  role     Role     @default(USER)
+  lastName      String?
+  userName      String   @unique
+  role          Role     @default(USER)
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
 
   // Relations
-  author   Author?
-  playthroughs Playthrough[]  
+  author        Author?
+  playthroughs  Playthrough[]
 }
 
 model Author {
-  id        String    @id @default(uuid())
-  name      String
-  bio       String?
+  id     String @id @default(uuid())
+  // --- REMOVED: name, bio are now in AuthorTranslation ---
+  // name   String
+  // bio    String?
 
   // Relation to User (1-to-1, nullable for system/AI authors)
-  userId    String?   @unique
-  user      User?     @relation(fields: [userId], references: [id])
+  userId String? @unique
+  user   User?   @relation(fields: [userId], references: [id])
 
   // Relations
-  chronicles Chronicle[]
-  images     Image[]
+  chronicles   Chronicle[]
+  images       Image[]
+  // --- ADDED: Relation to translations ---
+  translations AuthorTranslation[]
 }
+
+// --- ADDED: Translation table for Author ---
+model AuthorTranslation {
+  name String
+  bio  String?
+
+  // Foreign Keys & Composite Primary Key
+  authorId String
+  language Language
+  author   Author   @relation(fields: [authorId], references: [id], onDelete: Cascade)
+
+  @@id([authorId, language])
+}
+
 
 // --- CONTENT DEFINITION TABLES ---
 
 model Chronicle {
   id            String    @id @default(uuid())
-  title         String
-  description   String    @db.Text
+  // --- REMOVED: title, description are now in ChronicleTranslation ---
+  // title         String
+  // description   String    @db.Text
   coverImageUrl String
-  type          StoryType // STATIC or DYNAMIC_AI
+  type          StoryType
   isPublished   Boolean   @default(false)
   createdAt     DateTime  @default(now())
 
@@ -80,30 +107,61 @@ model Chronicle {
   startScene    Scene?    @relation("StartScene", fields: [startSceneId], references: [id])
 
   // Relations
-  scenes     Scene[]
-  playthroughs Playthrough[]
+  scenes        Scene[]
+  playthroughs  Playthrough[]
+  // --- ADDED: Relation to translations ---
+  translations  ChronicleTranslation[]
+}
+
+// --- ADDED: Translation table for Chronicle ---
+model ChronicleTranslation {
+  title       String
+  description String @db.Text
+
+  // Foreign Keys & Composite Primary Key
+  chronicleId String
+  language    Language
+  chronicle   Chronicle @relation(fields: [chronicleId], references: [id], onDelete: Cascade)
+
+  @@id([chronicleId, language])
 }
 
 model Image {
-  id              String   @id @default(uuid())
-  url             String   @unique
-  altText         String?
-  isAiGenerated   Boolean  @default(false)
+  id            String  @id @default(uuid())
+  url           String  @unique
+  // --- REMOVED: altText is now in ImageTranslation ---
+  // altText       String?
+  isAiGenerated Boolean @default(false)
 
   // Relation to Author
-  authorId        String?
-  author          Author?  @relation(fields: [authorId], references: [id])
+  authorId      String?
+  author        Author? @relation(fields: [authorId], references: [id])
 
   // Relations
-  scenes Scene[]
+  scenes       Scene[]
+  // --- ADDED: Relation to translations ---
+  translations ImageTranslation[]
 }
+
+// --- ADDED: Translation table for Image ---
+model ImageTranslation {
+  altText String?
+
+  // Foreign Keys & Composite Primary Key
+  imageId  String
+  language Language
+  image    Image @relation(fields: [imageId], references: [id], onDelete: Cascade)
+
+  @@id([imageId, language])
+}
+
 
 // --- STATIC STORY STRUCTURE (Node-Graph) ---
 
-/// A single step or narrative screen in a STATIC story.
 model Scene {
-  id        String @id @default(uuid())
-  content   String @db.Text // The story text, may contain {{variables}}
+  id      String @id @default(uuid())
+  // --- REMOVED: content is now in SceneTranslation ---
+  // content String @db.Text
 
   // Foreign Keys
   chronicleId String
@@ -113,24 +171,36 @@ model Scene {
   image     Image?    @relation(fields: [imageId], references: [id])
 
   // Relations (Branching)
-  // Decisions originating from this scene
   outgoingDecisions Decision[] @relation("FromScene")
-  // Decisions leading into this scene
   incomingDecisions Decision[] @relation("ToScene")
 
   // Relations for Playthrough Tracking
   currentPlaythroughs Playthrough[]
   isStartingSceneFor  Chronicle?     @relation("StartScene")
+  // --- ADDED: Relation to translations ---
+  translations        SceneTranslation[]
 }
 
-/// The choice/link between scenes in a STATIC story.
+// --- ADDED: Translation table for Scene ---
+model SceneTranslation {
+  content String @db.Text
+
+  // Foreign Keys & Composite Primary Key
+  sceneId  String
+  language Language
+  scene    Scene @relation(fields: [sceneId], references: [id], onDelete: Cascade)
+
+  @@id([sceneId, language])
+}
+
 model Decision {
   id    String @id @default(uuid())
-  text  String // The button text
+  // --- REMOVED: text is now in DecisionTranslation ---
+  // text  String
 
   // Advanced Personalization Logic
-  conditions Json? // E.g., {"inventory": {"has": "golden_key"}}
-  actions    Json? // E.g., {"stats": {"strength": -1}}
+  conditions Json?
+  actions    Json?
 
   // Foreign Keys (Defines the link)
   fromSceneId String
@@ -138,16 +208,30 @@ model Decision {
 
   toSceneId   String
   toScene     Scene  @relation("ToScene", fields: [toSceneId], references: [id], onDelete: Cascade)
+
+  // --- ADDED: Relation to translations ---
+  translations DecisionTranslation[]
 }
+
+// --- ADDED: Translation table for Decision ---
+model DecisionTranslation {
+  text String
+
+  // Foreign Keys & Composite Primary Key
+  decisionId String
+  language   Language
+  decision   Decision @relation(fields: [decisionId], references: [id], onDelete: Cascade)
+
+  @@id([decisionId, language])
+}
+
 
 // --- PLAYTHROUGH TABLES (User Game State) ---
 
-/// Represents a single user's session playing a Chronicle.
 model Playthrough {
   id             String    @id @default(uuid())
   startedAt      DateTime  @default(now())
   completedAt    DateTime?
-  // CORE PERSONALIZATION STATE: E.g., {"name": "Alex", "inventory": ["map"]}
   currentState   Json
 
   // Foreign Keys
@@ -157,7 +241,6 @@ model Playthrough {
   chronicleId    String
   chronicle      Chronicle @relation(fields: [chronicleId], references: [id], onDelete: Cascade)
 
-  // Current state for STATIC stories
   currentSceneId String?
   currentScene   Scene?    @relation(fields: [currentSceneId], references: [id])
 
@@ -165,19 +248,19 @@ model Playthrough {
   aiLogs PlaythroughLogAI[]
 }
 
-/// Log for dynamically generated (AI) stories.
 model PlaythroughLogAI {
   id                String   @id @default(uuid())
-  order             Int      // 1, 2, 3... sequence of interaction
+  order             Int
   generatedContent  String   @db.Text
   generatedImageUrl String?
-  userInput         String   @db.Text // What the user typed or selected
+  userInput         String   @db.Text
   createdAt         DateTime @default(now())
+  // --- ADDED: Language of this specific interaction ---
+  language          Language
 
   // Foreign Key
   playthroughId     String
   playthrough       Playthrough @relation(fields: [playthroughId], references: [id], onDelete: Cascade)
 
-  // Index for fast query of a specific playthrough's history
   @@index([playthroughId, order])
 }
