@@ -218,5 +218,13 @@
       "selectOption": "Please select an option to continue",
       "selectTopic": "Please select at least one topic to continue"
     }
+  },
+  "dashboard": {
+    "title": "Dashboard",
+    "welcome": "Welcome back!",
+    "createStory": "Create New Story",
+    "recentStories": "Recent Stories",
+    "noStories": "You haven't created any stories yet.",
+    "startFirst": "Start your first adventure"
   }
 }

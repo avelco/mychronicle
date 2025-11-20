@@ -1,17 +1,13 @@
-"use client";
+'use client';
 
 import React, { useState } from "react";
-import {
-  BookOpen,
-  ChevronRight,
-  ChevronLeft,
-  Check,
-  Sparkles,
-} from "lucide-react";
+import { BookOpen, ChevronRight, ChevronLeft, Check, Sparkles } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useRouter, useParams } from "next/navigation";
-import { completeOnboarding } from "./_actions";
 import { useUser } from "@clerk/nextjs";
+import { completeOnboarding } from "../_actions";
+
+// ... (Keep your Button, Card, and other interface definitions here) ...
 
 interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   children: React.ReactNode;
@@ -67,17 +63,16 @@ const Card = ({ children, className = "", onClick }: CardProps) => (
   </div>
 );
 
-const OnboardingPage = () => {
+export default function OnboardingClient({ dbUser }: { dbUser: any }) {
   const [step, setStep] = useState(1);
   const [selectedGender, setSelectedGender] = useState<string>("");
   const [selectedTopics, setSelectedTopics] = useState<string[]>([]);
-  const [error, setError] = React.useState('')
+  const [error, setError] = useState('');
+  
   const { user } = useUser();
-
   const t = useTranslations('onboarding');
   const router = useRouter();
   const params = useParams();
-  const locale = params.locale as string;
 
   const genderOptions = [
     { id: "male", label: t('step1.male'), emoji: "👨" },
@@ -180,17 +175,22 @@ const OnboardingPage = () => {
     }
   };
 
+  const handleSubmit = async (selectedGender: string, selectedTopics: string[]) => {
+    const res = await completeOnboarding(selectedGender, selectedTopics)
+    if (res?.message) {
+      await user?.reload()
+      router.push('/')
+    }
+    if (res?.error) {
+      setError(res?.error)
+    }
+  }
+
   const handleNext = async () => {
     if (step === 1 && selectedGender) {
       setStep(2);
     } else if (step === 2 && selectedTopics.length > 0) {
-      // Call your completeOnboarding action here
-      // const res = await completeOnboarding({ selectedGender, selectedTopics });
-      console.log("Onboarding complete:", { selectedGender, selectedTopics });
       handleSubmit(selectedGender, selectedTopics)
-      
-      // Redirect to main app with locale
-      // router.push(`/${locale}/dashboard`);
     }
   };
 
@@ -202,21 +202,9 @@ const OnboardingPage = () => {
 
   const canProceed = step === 1 ? selectedGender : selectedTopics.length > 0;
 
-    const handleSubmit = async (selectedGender: string, selectedTopics: string[]) => {
-    const res = await completeOnboarding(selectedGender, selectedTopics)
-    if (res?.message) {
-      // Reloads the user's data from the Clerk API
-      await user?.reload()
-      router.push('/')
-    }
-    if (res?.error) {
-      setError(res?.error)
-    }
-  }
-
   return (
     <div className="min-h-screen bg-slate-950 text-slate-100">
-      {/* Fonts */}
+      {/* ... (Keep your existing JSX return) ... */}
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Lora:wght@600;700&family=Inter:wght@400;500;600&display=swap');
         
@@ -384,6 +372,4 @@ const OnboardingPage = () => {
       </main>
     </div>
   );
-};
-
-export default OnboardingPage;
+}

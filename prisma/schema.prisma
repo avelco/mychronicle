@@ -11,8 +11,8 @@ generator client {
 
 datasource db {
   provider = "postgresql"
-  url      = env("DATABASE_URL")
 }
+
 
 // --- Enums ---
 
@@ -31,9 +31,8 @@ enum Role {
 // --- ADDED: Language Enum ---
 /// Defines the supported languages for content.
 enum Language {
-  EN // English
-  ES // Spanish
-  // Add more languages here, e.g., FR, DE
+  EN
+  ES
 }
 
 
@@ -42,10 +41,10 @@ enum Language {
 model User {
   id            String   @id @default(cuid())
   email         String   @unique
-  password      String
   firstName     String
   lastName      String?
-  userName      String   @unique
+  userName      String?   @unique
+  languagePref  Language  @default(EN)
   role          Role     @default(USER)
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt

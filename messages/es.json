@@ -218,5 +218,13 @@
       "selectOption": "Por favor selecciona una opción para continuar",
       "selectTopic": "Por favor selecciona al menos un tema para continuar"
     }
+  },
+  "dashboard": {
+    "title": "Panel de Control",
+    "welcome": "¡Bienvenido de nuevo!",
+    "createStory": "Crear Nueva Historia",
+    "recentStories": "Historias Recientes",
+    "noStories": "Aún no has creado ninguna historia.",
+    "startFirst": "Comienza tu primera aventura"
   }
 }

@@ -15,7 +15,7 @@ export default async function LocaleLayout({children, params}: Props) {
   }
  
   // Load the messages for the requested locale
-  const messages = await import(`../../../messages/${locale}.json`).then(
+  const messages = await import(`../../messages/${locale}.json`).then(
     (mod) => mod.default,
   );
  
