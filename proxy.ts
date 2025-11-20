@@ -8,7 +8,7 @@ const intlMiddleware = createMiddleware(routing);
 // Update route matchers to include locale prefix
 const isPublicRoute = createRouteMatcher(["/:locale/public-route-example"]);
 const isPrivateRoute = createRouteMatcher([
-  "/admin/dashboard(.*)",
+  "/admin/(.*)",
   "/api(.*)",
 ]);
 const isDashboardRoute = createRouteMatcher(["/:locale/dashboard(.*)"]);

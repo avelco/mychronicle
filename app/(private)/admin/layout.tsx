@@ -1,7 +1,7 @@
 import { currentUser } from '@clerk/nextjs/server';
 import { redirect } from 'next/navigation';
 import { prisma } from '@/lib/prisma';
-import AdminNavbar from './dashboard/_components/navbar';
+import AdminNavbar from './_components/navbar';
 
 export default async function AdminLayout({ children }: { children: React.ReactNode }) {
   // 1. Get the current authenticated user from Clerk
@@ -27,9 +27,11 @@ export default async function AdminLayout({ children }: { children: React.ReactN
     <div className="min-h-screen bg-slate-950">
       {/* Optional: Add admin navbar/sidebar here */}
       <AdminNavbar />
-      <div className="container mx-auto py-8">
-        {children}
-      </div>
+      <main className="md:pl-64 pt-16 md:pt-0">
+        <div className="container mx-auto py-8 px-4">
+          {children}
+        </div>
+      </main>
     </div>
   );
 }

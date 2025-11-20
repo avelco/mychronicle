@@ -13,13 +13,13 @@ import {
   Shield,
   LogOut
 } from 'lucide-react';
-import { UserButton } from '@clerk/nextjs';
+import { UserButton, SignOutButton } from '@clerk/nextjs';
 
 const navItems = [
   { name: 'Overview', href: '/admin/dashboard', icon: LayoutDashboard },
-  { name: 'Users', href: '/admin/dashboard/users', icon: Users },
-  { name: 'Stories', href: '/admin/dashboard/stories', icon: BookOpen },
-  { name: 'Settings', href: '/admin/dashboard/settings', icon: Settings },
+  { name: 'Usuarios', href: '/admin/users', icon: Users },
+  { name: 'Historias', href: '/admin/stories', icon: BookOpen },
+  { name: 'Configuraciones', href: '/admin/settings', icon: Settings },
 ];
 
 export default function AdminNavbar() {
@@ -78,7 +78,7 @@ export default function AdminNavbar() {
           </div>
 
           {/* Navigation Links */}
-          <nav className="flex-1 py-6 space-y-1 overflow-y-auto">
+          <nav className="flex-1 py-6 space-y-1 overflow-y-auto flex flex-col">
             <div className="px-6 mb-4">
               <p className="text-xs font-semibold text-slate-500 uppercase tracking-wider">
                 Menu
@@ -87,6 +87,15 @@ export default function AdminNavbar() {
             {navItems.map((item) => (
               <NavLink key={item.href} item={item} onClick={() => setIsOpen(false)} />
             ))}
+
+            <div className="mt-auto px-2">
+              <SignOutButton>
+                <button className="flex items-center gap-3 px-4 py-3 text-sm font-medium transition-all duration-200 rounded-lg w-full text-slate-400 hover:bg-red-950/10 hover:text-red-400 group">
+                  <LogOut className="w-5 h-5 text-slate-500 group-hover:text-red-400" />
+                  Sign out
+                </button>
+              </SignOutButton>
+            </div>
           </nav>
 
           {/* User / Footer Area */}
